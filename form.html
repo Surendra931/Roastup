@@ -1,0 +1,66 @@
+<html>
+<head>
+<link href="form.css" rel="stylesheet">
+<script src="http://10.30.28.123:8000/ROASTUP/form.js"type="text/javascript"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			<h3>CART DETAILS</h3> <br>
+		</div>
+		<form action="http://10.30.28.123:8000/ROASTUP/order.html" method="">
+			
+			<div class="details">
+				<?php
+				$con=new mysqli("localhost","root","","SSD");
+				if(!$con)
+				{
+					echo "There is an error while connection";
+				}
+				$sel="select * from temp";
+				$que=mysqli_query($con,$sel);
+				$totalcost=0;
+				if(mysqli_num_rows($que)!=0)
+				{
+				//$data=mysqli_fetch_assoc($que);
+				echo "<table border='1'>
+				<tr>
+				<th>Item Name</th>
+				<th>Quantity</th>
+				<th>Cost</th>
+				</tr>";
+				while($data=mysqli_fetch_assoc($que))
+				{
+					$id=$data['id'];
+					$sele="select * from menu where id=$id";
+					$ques=mysqli_query($con,$sele);
+					$da=mysqli_fetch_assoc($ques);
+					$name=$da['name'];
+					$price=$da['price'];
+					$cost=$price*$data['qty'];
+					$totalcost=$totalcost+$cost;
+					echo "<tr>
+					<td>".$name."</td>
+					<td>".$data['qty']."</td>
+					<td>".$cost."</td>
+					<tr>";
+					
+				}
+				echo "</table>";
+				echo "<br>Total Amount: ".$totalcost;
+				echo "</div>
+			<div class='sub'>
+				<!--<input type='button' class='sub-btn' value='Confirm' >  -->
+				<a href='http://10.30.28.123:8000/ROASTUP/order.html'><button>Confirm Order</button></a>
+			</div>";
+				}
+				else
+				{
+					echo "<strong><font color=red><center>No items in the Cart</center></font></strong>";
+				}
+				?>
+				
+		</form>
+	</div>	
+</body>
+</html>
